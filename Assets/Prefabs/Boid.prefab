@@ -42,11 +42,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -8679921383154817045, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -74,9 +74,6 @@ PrefabInstance:
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 8193164000732082235}
-    - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
-      insertIndex: -1
       addedObject: {fileID: 2564603473525183788}
     - targetCorrespondingSourceObject: {fileID: 919132149155446097, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
       insertIndex: -1
@@ -87,33 +84,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 76bf25db17d4a774bbdc8c3dfd1ff858, type: 3}
   m_PrefabInstance: {fileID: 6895197865254080105}
   m_PrefabAsset: {fileID: 0}
---- !u!54 &8193164000732082235
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6012798345516249912}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &2564603473525183788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,9 +96,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2733ff5b40e13a644ae601dbf4955a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  manager: {fileID: 0}
-  perceptualRadius: 4
-  currentVel: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0}
+  maxSpeed: 5
+  maxForce: 0.5
+  separationWeight: 1.55
+  alignmentWeight: 1.18
+  cohesionWeight: 1.66
+  neighborRadius: 22.8
+  separationRadius: 4.1
 --- !u!135 &6077777749097216170
 SphereCollider:
   m_ObjectHideFlags: 0

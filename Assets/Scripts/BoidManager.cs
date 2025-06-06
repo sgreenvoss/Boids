@@ -9,8 +9,9 @@ public class BoidManager : MonoBehaviour
     [SerializeField] public int boidCount;
     [SerializeField] public GameObject boidPrefab;
     public GameObject worldBounds;
-    static public List<Transform> boidPositions = new();
+
     private List<Boid> boids = new();
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -28,15 +29,34 @@ public class BoidManager : MonoBehaviour
             Vector3 randomPos = new Vector3(randomX, randomY, randomZ);
             GameObject boid = Instantiate(boidPrefab, randomPos, Random.rotation);
             Boid b = boid.GetComponent<Boid>();
-            b.manager = this;
             boids.Add(b);
-            boidPositions.Add(boid.transform);
         }
     }
 
-    // Update is called once per frame
-    void Update()
+    public List<Boid> GetNeighbors(Boid boid, float radius)
     {
-       // foreach
+        List<Boid> neighbors = new List<Boid>();
+        foreach (var other in boids)
+        {
+            if (other != boid)
+            {
+                float dist = Vector3.Distance(boid.transform.position, other.transform.position);
+                if (dist < radius)
+                    neighbors.Add(other);
+            }
+        }
+        return neighbors;
+    }
+
+    public Vector3 BoundVec = new Vector3(10f, 10f, 10f);
+
+    public Bounds GetWorldBounds()
+    {
+        return new Bounds(transform.position, BoundVec);
+    }
+    void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireCube(transform.position, BoundVec);
     }
 }
