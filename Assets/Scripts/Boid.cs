@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+
 
 public class Boid : MonoBehaviour
 {
@@ -36,12 +38,7 @@ public class Boid : MonoBehaviour
     {
         List<Boid> neighbors = manager.GetNeighbors(this, neighborRadius);
 
-        Vector3 separation = AvoidCollision(neighbors) * separationWeight;
-        Vector3 alignment = MatchVel(neighbors) * alignmentWeight;
-        Vector3 cohesion = CenterFlock(neighbors) * cohesionWeight;
-        Vector3 boundsSteer = ComputeBoundsSteer();
-
-        Vector3 acceleration = separation + alignment + cohesion + boundsSteer;
+        Vector3 acceleration = AllMethods(neighbors);
 
         // Apply acceleration
         velocity += acceleration * Time.deltaTime;
@@ -61,6 +58,53 @@ public class Boid : MonoBehaviour
         pos.z = Mathf.Clamp(pos.z, min.z, max.z);
         transform.position = pos;
     }
+
+    Vector3 AllMethods(List<Boid> neighbors)
+    {
+        Vector3 separation = Vector3.zero;
+        int s_count = 0;
+        Vector3 avgVelocity = Vector3.zero;
+        Vector3 center = Vector3.zero;
+        int count = 0;
+
+        foreach (var boid in neighbors)
+        {
+            float d = Vector3.Distance(transform.position, boid.transform.position);
+            if (d > 0 && d < separationRadius)
+            {
+                Vector3 diff = (transform.position - boid.transform.position).normalized;
+                separation += diff / d;
+                s_count++;
+            }
+            avgVelocity += boid.velocity;
+            center += boid.transform.position;
+
+            count++;
+        }
+        if (s_count > 0)
+        {
+            separation /= s_count;
+            separation = separation.normalized * maxSpeed - velocity;
+            separation = Vector3.ClampMagnitude(separation, maxForce);
+        }
+
+        if (count > 0) {
+            avgVelocity /= count;
+            avgVelocity = avgVelocity.normalized * maxSpeed - velocity;
+            avgVelocity = Vector3.ClampMagnitude(avgVelocity, maxForce);
+
+            center /= count;
+            Vector3 desired = (center - transform.position).normalized * maxSpeed;
+            center = desired - velocity;
+            center = Vector3.ClampMagnitude(center, maxForce);
+        }
+        return separation * separationWeight +
+                avgVelocity * alignmentWeight +
+                center * cohesionWeight +
+                ComputeBoundsSteer();
+
+    }
+
     Vector3 AvoidCollision(List<Boid> neighbors)
     {
         Vector3 steer = Vector3.zero;

@@ -406,7 +406,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2380e7f1966e42d419e1c24b4bce7da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boidCount: 200
+  boidCount: 1000
   boidPrefab: {fileID: 492272931090713815, guid: 833ad7ec0a9d91b4186f99dd9550689f, type: 3}
 --- !u!4 &1721444888
 Transform:
