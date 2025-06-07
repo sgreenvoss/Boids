@@ -8,7 +8,7 @@ public class BoidManager : MonoBehaviour
 {
     [SerializeField] public int boidCount;
     [SerializeField] public GameObject boidPrefab;
-    public GameObject worldBounds;
+    Vector3 worldBounds = new Vector3(23f, 14f, 19f);
 
     private List<Boid> boids = new();
 
@@ -16,20 +16,16 @@ public class BoidManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Bounds cubeBounds = worldBounds.GetComponent<BoxCollider>().bounds;
-        Vector3 max = cubeBounds.max;
-        Vector3 min = cubeBounds.min;
-
         for (int i = 0; i < boidCount; i++)
         {
-            float randomX = Random.Range(min.x + 1, max.x - 1);
-            float randomY = Random.Range(min.y + 1, max.y - 1);
-            float randomZ = Random.Range(min.z + 1, max.z - 1);
-
-            Vector3 randomPos = new Vector3(randomX, randomY, randomZ);
-            GameObject boid = Instantiate(boidPrefab, randomPos, Random.rotation);
-            Boid b = boid.GetComponent<Boid>();
-            boids.Add(b);
+            Vector3 position = transform.position + new Vector3(
+                Random.Range(-worldBounds.x, worldBounds.x),
+                Random.Range(-worldBounds.y, worldBounds.y),
+                Random.Range(-worldBounds.z, worldBounds.z)
+            );
+            GameObject boidGO = Instantiate(boidPrefab, position, Quaternion.identity);
+            Boid boid = boidGO.GetComponent<Boid>();
+            boids.Add(boid);
         }
     }
 
@@ -48,15 +44,13 @@ public class BoidManager : MonoBehaviour
         return neighbors;
     }
 
-    public Vector3 BoundVec = new Vector3(10f, 10f, 10f);
-
     public Bounds GetWorldBounds()
     {
-        return new Bounds(transform.position, BoundVec);
+        return new Bounds(transform.position, worldBounds * 2f);
     }
     void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;
-        Gizmos.DrawWireCube(transform.position, BoundVec);
+        Gizmos.DrawWireCube(transform.position, worldBounds * 2f);
     }
 }

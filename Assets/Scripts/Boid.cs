@@ -4,7 +4,8 @@ using System.Collections.Generic;
 public class Boid : MonoBehaviour
 {
     public Vector3 velocity;
-    public float maxSpeed = 5f;
+    public float minSpeed = 2f;
+    public float maxSpeed = 8f;
     public float maxForce = 0.5f;
     // [SerializeField] int perceptualRadius;
     //Rigidbody rb;
@@ -24,10 +25,14 @@ public class Boid : MonoBehaviour
     void Start()
     {
         manager = FindObjectOfType<BoidManager>();
+        if (manager == null)
+        {
+            Debug.Log("THIS IS PROBL");
+        }
         velocity = Random.insideUnitSphere * maxSpeed;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         List<Boid> neighbors = manager.GetNeighbors(this, neighborRadius);
 
@@ -40,11 +45,21 @@ public class Boid : MonoBehaviour
 
         // Apply acceleration
         velocity += acceleration * Time.deltaTime;
-        velocity = Vector3.ClampMagnitude(velocity, maxSpeed);
+        float speed = velocity.magnitude;
+        velocity = velocity.normalized * Mathf.Clamp(speed, minSpeed, maxSpeed);
         transform.position += velocity * Time.deltaTime;
 
         if (velocity != Vector3.zero)
             transform.rotation = Quaternion.LookRotation(velocity);
+
+        Bounds bounds = manager.GetWorldBounds();
+        Vector3 pos = transform.position;
+        Vector3 min = bounds.min + Vector3.one * 0.1f;
+        Vector3 max = bounds.max - Vector3.one * 0.1f;
+        pos.x = Mathf.Clamp(pos.x, min.x, max.x);
+        pos.y = Mathf.Clamp(pos.y, min.y, max.y);
+        pos.z = Mathf.Clamp(pos.z, min.z, max.z);
+        transform.position = pos;
     }
     Vector3 AvoidCollision(List<Boid> neighbors)
     {
@@ -111,23 +126,23 @@ public class Boid : MonoBehaviour
         Vector3 steer = Vector3.zero;
         Vector3 pos = transform.position;
 
-        float threshold = 2f; // Start steering when close to edge
-        float turnForce = maxForce * 2f;   // Strength of the boundary correction
+        float threshold = 4f; // Start steering farther out
+        float k = maxForce * 4f;
 
         if (pos.x < bounds.min.x + threshold)
-            steer.x = turnForce;
+            steer.x = Mathf.Lerp(k, 0, (pos.x - bounds.min.x) / threshold);
         else if (pos.x > bounds.max.x - threshold)
-            steer.x = -turnForce;
+            steer.x = -Mathf.Lerp(k, 0, (bounds.max.x - pos.x) / threshold);
 
         if (pos.y < bounds.min.y + threshold)
-            steer.y = turnForce;
+            steer.y = Mathf.Lerp(k, 0, (pos.y - bounds.min.y) / threshold);
         else if (pos.y > bounds.max.y - threshold)
-            steer.y = -turnForce;
+            steer.y = -Mathf.Lerp(k, 0, (bounds.max.y - pos.y) / threshold);
 
         if (pos.z < bounds.min.z + threshold)
-            steer.z = turnForce;
+            steer.z = Mathf.Lerp(k, 0, (pos.z - bounds.min.z) / threshold);
         else if (pos.z > bounds.max.z - threshold)
-            steer.z = -turnForce;
+            steer.z = -Mathf.Lerp(k, 0, (bounds.max.z - pos.z) / threshold);
 
         return Vector3.ClampMagnitude(steer, maxForce);
     }
