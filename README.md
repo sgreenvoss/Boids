@@ -1,2 +1,3 @@
 # implementation of unoptimized algorithm with 250 boids
-[![flocking fish](https://img.youtube.com/vi/oNh6Kg_ygR0/0.jpg)](https://www.youtube.com/watch?v=oNh6Kg_ygR0)
+https://github.com/user-attachments/assets/dd284472-9a58-472f-b607-73c6991e0c5b
+
