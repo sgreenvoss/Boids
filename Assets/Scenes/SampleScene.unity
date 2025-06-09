@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 330585545}
   - component: {fileID: 330585544}
   - component: {fileID: 330585547}
+  - component: {fileID: 330585548}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -256,6 +257,19 @@ MonoBehaviour:
     m_MipBias: 0
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
+--- !u!114 &330585548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330585543}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 108f0381b0ac13c4d917e5960daea081, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotate: 0
 --- !u!1 &410087039
 GameObject:
   m_ObjectHideFlags: 0
@@ -347,13 +361,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 410087039}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalRotation: {x: 0.19767764, y: -0.33200336, z: 0.037348658, w: 0.9215761}
+  m_LocalPosition: {x: 44.14, y: 31.980001, z: -44.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 22.902, y: -40.411, z: -3.885}
 --- !u!114 &410087042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -406,8 +420,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2380e7f1966e42d419e1c24b4bce7da1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  boidCount: 1000
+  boidCount: 10
   boidPrefab: {fileID: 492272931090713815, guid: 833ad7ec0a9d91b4186f99dd9550689f, type: 3}
+  foodPrefab: {fileID: 7060725309158844220, guid: 092c68bb96ed13345864559c897de592, type: 3}
+  food: []
 --- !u!4 &1721444888
 Transform:
   m_ObjectHideFlags: 0

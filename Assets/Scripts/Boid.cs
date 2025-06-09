@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 
 public class Boid : MonoBehaviour
@@ -9,6 +8,7 @@ public class Boid : MonoBehaviour
     public float minSpeed = 2f;
     public float maxSpeed = 8f;
     public float maxForce = 0.5f;
+    public float flockRandomStrength = 1f;
     // [SerializeField] int perceptualRadius;
     //Rigidbody rb;
 
@@ -16,6 +16,8 @@ public class Boid : MonoBehaviour
     public float separationWeight = 0.5f;
     public float alignmentWeight = 1.2f;
     public float cohesionWeight = 1.5f;
+    public float randomWeight = 1f;
+    public float feedWeight = 1.5f;
 
     // Detection radius
     public float neighborRadius = 5f;
@@ -27,18 +29,17 @@ public class Boid : MonoBehaviour
     void Start()
     {
         manager = FindObjectOfType<BoidManager>();
-        if (manager == null)
-        {
-            Debug.Log("THIS IS PROBL");
-        }
+
         velocity = Random.insideUnitSphere * maxSpeed;
     }
 
     private void Update()
     {
-        List<Boid> neighbors = manager.GetNeighbors(this, neighborRadius);
+        List<Boid> neighbors = manager.GetNeighbors(this);
 
         Vector3 acceleration = AllMethods(neighbors);
+        acceleration += RNG() * randomWeight;
+        acceleration += Feed() * feedWeight;
 
         // Apply acceleration
         velocity += acceleration * Time.deltaTime;
@@ -190,5 +191,16 @@ public class Boid : MonoBehaviour
 
         return Vector3.ClampMagnitude(steer, maxForce);
     }
+
+    Vector3 RNG()
+    {
+        return Random.insideUnitSphere * flockRandomStrength;
+    }
+    
+    Vector3 Feed()
+    {
+        return manager.GetFood(transform, neighborRadius);
+    }
+
 
 }
