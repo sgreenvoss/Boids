@@ -14,6 +14,8 @@ public class BoidManager : MonoBehaviour
     bool foodEnabled = false;
     int foodCount = 40;
 
+    float sensSize;
+
     private List<Boid> boids = new();
     public List<Transform> food = new();
     static public Grid world;
@@ -34,7 +36,9 @@ public class BoidManager : MonoBehaviour
             boids.Add(boid);
         }
 
-        world = new Grid(boids, 4f);
+        sensSize = boids[0].GetComponent<Boid>().neighborRadius;
+
+        world = new Grid(boids, sensSize);
 
         if (!foodEnabled) return;
         for (int i = 0; i < foodCount; i++)
@@ -85,19 +89,19 @@ public class BoidManager : MonoBehaviour
         return new Bounds(transform.position, worldBounds * 2f);
     }
 
-    //private void OnDrawGizmos()
-    //{
-    //    if (world ==null || world.spatialHash == null) return;
-    //    Gizmos.color = new Color(.2f, .8f, 1f, .25f);
-    //    foreach (var kvp in world.spatialHash)
-    //    {
-    //        Vector3Int cell = kvp.Key;
-    //        if (kvp.Value == null || kvp.Value.Count == 0) continue;
+   /* private void OnDrawGizmos()
+    {
+        if (world == null || world.spatialHash == null) return;
+        Gizmos.color = new Color(.2f, .8f, 1f, .25f);
+        foreach (var kvp in world.spatialHash)
+        {
+            Vector3Int cell = kvp.Key;
+            if (kvp.Value == null || kvp.Value.Count == 0) continue;
 
-    //        Vector3 worldPos = world.CellToWorld(cell);
-    //        Gizmos.DrawCube(worldPos, Vector3.one * world.cellSize);
-    //    }
-    //}
+            Vector3 worldPos = world.CellToWorld(cell);
+            Gizmos.DrawCube(worldPos, Vector3.one * world.cellSize);
+        }
+    }*/
 
 }
 
@@ -138,7 +142,7 @@ public class Grid
     {
         List<Boid> neighbors = new();
         Vector3Int centerCell = WorldToCell(boid.transform.position);
-        for (int x = -1; x <= 1; x++)
+        for (int x = -1; x <= 1; x+=2)
         for (int y = -1; y <= 1; y++)
         for (int z = -1; z <= 1; z++)
         {
@@ -146,17 +150,15 @@ public class Grid
                 Vector3Int neighborCell = centerCell + offset;
                 if (spatialHash.TryGetValue(neighborCell, out var boidList))
                 {
-                    foreach (var other in boidList)
-                    {
-                        if (other != boid &&
-                            (other.transform.position - boid.transform.position).sqrMagnitude <
-                            boid.neighborRadius * boid.neighborRadius)
-                        {
-                            neighbors.Add(other);
-                        }
-                    }
+                        neighbors.AddRange(boidList);
                 }
+                    
         }
+        if (spatialHash.TryGetValue(centerCell, out var nList))
+        {
+            neighbors.AddRange(nList);
+        }
+        neighbors.Remove(boid);
         return neighbors;
     }
 

@@ -28,6 +28,11 @@ public class Boid : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        /*separationWeight += Random.Range(-1, 1);
+        alignmentWeight += Random.Range(-1, 1);
+        cohesionWeight += Random.Range(-1, 1);
+        randomWeight += Random.Range(-1, 1); */
+
         manager = FindObjectOfType<BoidManager>();
 
         velocity = Random.insideUnitSphere * maxSpeed;

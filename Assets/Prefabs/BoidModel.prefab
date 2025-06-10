@@ -100,14 +100,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
-  minSpeed: 5.24
+  minSpeed: 3.38
   maxSpeed: 11
   maxForce: 8.2
   flockRandomStrength: 1.7
-  separationWeight: 2.04
+  separationWeight: 2
   alignmentWeight: 2
-  cohesionWeight: 1
+  cohesionWeight: 1.26
   randomWeight: 1
-  feedWeight: 1.5
-  neighborRadius: 4
-  separationRadius: 3.53
+  feedWeight: 0
+  neighborRadius: 2
+  separationRadius: 4.57
